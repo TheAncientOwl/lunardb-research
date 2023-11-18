@@ -1,0 +1,229 @@
+source: https://www.w3schools.com/sql/
+
+select:
+    syntax: |
+        SELECT column1, column2, ...
+        FROM table_name;
+
+        SELECT DISTINCT column1, column2, ...
+        FROM table_name;
+
+        SELECT COUNT(DISTINCT column_name)
+        FROM table_name;
+
+        SELECT column1, column2, ...
+        FROM table_name
+        WHERE condition1 AND|OR condition2 AND|OR...;
+
+        SELECT column1, column2, ...
+        FROM table_name
+        ORDER BY column1, column2, ... ASC|DESC;
+
+        SELECT column_name(s)
+        FROM table_name
+        WHERE condition
+        GROUP BY column_name(s)
+        ORDER BY column_name(s);
+
+        SELECT column_name(s)
+        FROM table_name
+        WHERE condition
+        GROUP BY column_name(s)
+        HAVING condition
+        ORDER BY column_name(s);
+
+        SELECT column_name(s)
+        FROM table_name
+        WHERE column_name operator ANY
+          (SELECT column_name
+          FROM table_name
+          WHERE condition);
+
+        SELECT column_name(s)
+        FROM table_name
+        WHERE column_name operator ALL
+          (SELECT column_name
+          FROM table_name
+          WHERE condition);
+
+        SELECT *
+        INTO newtable [IN externaldb]
+        FROM oldtable
+        WHERE condition;
+
+    notes:
+        - subqueries
+        - first n rows
+        - last n rows
+        - functions
+        - aliases for columns and tables
+
+where operators: [
+    "=", ">", "<", ">=", "<=", "<>", 
+    "BETWEEN", "LIKE", "IN", 
+    "AND", "OR", "NOT",
+    "IS NULL", "IS NOT NULL"
+]
+
+insert:
+    syntax: |
+        INSERT INTO table_name (column1, column2, column3, ...)
+        VALUES 
+            (value_11, value_12, value_13, ...),
+            (value_21, value_22, value_23, ...),
+            ...
+            (value_n1, value_n2, value_n3, ...);
+
+        INSERT INTO table_name
+        VALUES 
+            (value_11, value_12, value_13, ...),
+            (value_21, value_22, value_23, ...),
+            ...
+            (value_n1, value_n2, value_n3, ...);
+
+        INSERT INTO table2
+        SELECT * FROM table1
+        WHERE condition;
+
+        INSERT INTO table2 (column1, column2, column3, ...)
+        SELECT column1, column2, column3, ...
+        FROM table1
+        WHERE condition;
+
+update:
+    syntax: |
+        UPDATE table_name
+        SET column1 = %computation1%, column2 = %computation2%, ...
+        WHERE condition;
+
+delete:
+    syntax: |
+        DELETE FROM table_name 
+        WHERE condition;
+
+drop:
+    syntax: |
+        DROP TABLE table_name;
+
+joins: 
+    syntax:
+        (INNER) JOIN: | 
+            Returns records that have matching values in both tables
+        LEFT (OUTER) JOIN: | 
+            Returns all records from the left table, and the matched records from the right table
+        RIGHT (OUTER) JOIN: | 
+            Returns all records from the right table, and the matched records from the left table
+        FULL (OUTER) JOIN: | 
+            Returns all records when there is a match in either left or right table
+
+consider to implement:
+    unions: |
+        ...
+    autoincrement: |
+        ...
+    case:
+        syntax: |
+            CASE
+                WHEN condition1 THEN result1
+                WHEN condition2 THEN result2
+                WHEN conditionN THEN resultN
+                ELSE result
+            END;
+        example: |
+            SELECT CustomerName, City, Country
+            FROM Customers
+            ORDER BY
+            (CASE
+                WHEN City IS NULL THEN Country
+                ELSE City
+            END);
+    null functions: |
+        [ "IFNULL()", "ISNULL()", "COALESCE()", "NVL()" ]
+
+database related:
+    show: |
+        SHOW DATABASES;
+    create: |
+        CREATE DATABASE databasename;
+    drop: |
+        DROP DATABASE databasename;
+    backup: |
+        BACKUP DATABASE databasename
+        TO DISK = 'filepath';
+        
+        BACKUP DATABASE databasename
+        TO DISK = 'filepath'
+        WITH DIFFERENTIAL;
+
+table related:
+    create:
+        syntax: |
+            CREATE TABLE table_name (
+            column1 datatype constraint,
+            column2 datatype constraint,
+            column3 datatype constraint,
+            ....
+        );
+
+            CREATE TABLE new_table_name AS
+                SELECT column1, column2,...
+                FROM existing_table_name
+                WHERE ....;
+    drop:
+        syntax: |
+            DROP TABLE table_name;
+    truncate:
+        syntax: |
+            TRUNCATE TABLE table_name;
+    alter:
+        syntax: |
+            ALTER TABLE table_name
+            ADD column_name datatype;
+
+            ALTER TABLE table_name
+            RENAME COLUMN old_name to new_name;
+
+            ALTER TABLE table_name
+            MODIFY column_name datatype;
+
+            ALTER TABLE table_name
+            DROP COLUMN column_name;
+    constraints:
+        NOT NULL: |
+             Ensures that a column cannot have a NULL value
+        UNIQUE: |
+             Ensures that all values in a column are different
+        PRIMARY KEY: |
+             A combination of a NOT NULL and UNIQUE. Uniquely identifies each row in a table
+        FOREIGN KEY: |
+             Prevents actions that would destroy links between tables
+        CHECK: |
+             Ensures that the values in a column satisfies a specific condition
+        DEFAULT: |
+             Sets a default value for a column if no value is specified
+        CREATE INDEX: |
+             Used to create and retrieve data from the database very quickly
+    index:
+        syntax: |
+            CREATE INDEX index_name
+            ON table_name (column1, column2, ...);
+
+            CREATE UNIQUE INDEX index_name
+            ON table_name (column1, column2, ...);
+            
+            DROP INDEX index_name;
+
+    date datatypes format:
+        DATE: YYYY-MM-DD
+        DATETIME: YYYY-MM-DD HH:MI:SS
+        TIMESTAMP: YYYY-MM-DD HH:MI:SS
+        YEAR: YYYY or YY
+    
+    view:
+        syntax: |
+            CREATE OR REPLACE VIEW view_name AS
+            SELECT column1, column2, ...
+            FROM table_name
+            WHERE condition;
+
+            DROP VIEW view_name;
