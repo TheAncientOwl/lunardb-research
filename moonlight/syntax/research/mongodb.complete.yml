@@ -1,0 +1,348 @@
+# reference: https://www.w3schools.com/mongodb/
+
+brief: |
+  SQL databases are considered relational databases. 
+  They store related data in separate tables. 
+  When data is needed, it is queried from multiple tables to join the data back together.
+
+  MongoDB is a document database which is often referred to as a non-relational database. 
+  This does not mean that relational data cannot be stored in document databases. 
+  It means that relational data is stored differently. 
+  A better way to refer to it is as a non-tabular database.
+
+  MongoDB stores data in flexible documents. 
+  Instead of having multiple tables you can simply keep all of your related data together. 
+  This makes reading your data very fast.
+
+  You can still have multiple groups of data too. 
+  In MongoDB, instead of tables these are called collections.
+
+document example: |
+  {
+  	title: "Post Title 1",
+  	body: "Body of post.",
+  	category: "News",
+  	likes: 1,
+  	tags: ["news", "events"],
+  	date: Date()
+  }
+
+choose work database:
+  syntax: |
+    use database_name;
+  
+create collection:
+  syntax: |
+    db.createCollection("collection_name")
+
+insert:
+  syntax: |
+    db.collection_name.insertOne(obj)
+    db.collection_name.insertMany([obj1, obj2, ...])
+  note: |
+    obj is a valid JavaScript obj
+  example: |
+    db.posts.insertOne({
+      title: "Post Title 1",
+      body: "Body of post.",
+      category: "News",
+      likes: 1,
+      tags: ["news", "events"],
+      date: Date()
+    })
+
+find:
+  syntax: |
+    db.collection_name.find() # -> it returns all documents
+    db.collection_name.findOne() # -> it returns first document
+    db.collection_name.find(filter_obj)
+    db.collection_name.find(filter_obj, projection_obj)
+  
+  example: |
+    db.posts.find( {category: "News"} )
+    db.posts.find({}, {_id: 0, title: 1, date: 1}) # -> 1 include, 0 exclude
+
+update:
+  syntax: |
+    db.collection_name.updateOne(filter_obj, { $set: value }, {upsert: boolean})
+    db.collection_name.updateMany(filter_obj, { $inc: obj })
+  note: |
+    upsert -> insert if not exist
+
+  example: |
+    db.posts.updateOne( { title: "Post Title 1" }, { $set: { likes: 2 } } ) 
+    db.posts.updateOne( 
+      { title: "Post Title 5" }, 
+      {
+        $set: 
+          {
+            title: "Post Title 5",
+            body: "Body of post.",
+            category: "Event",
+            likes: 5,
+            tags: ["news", "events"],
+            date: Date()
+          }
+      }, 
+      { upsert: true }
+    )
+    db.posts.updateMany({}, { $inc: { likes: 1 } })
+
+delete:
+  syntax: |
+    db.collection_name.deleteOne(filter_obj)
+    db.collection_name.deleteMany(filter_obj)
+
+operators:
+  query:
+    comparison: | can be used in queries to compare values
+      $eq: Values are equal
+      $ne: Values are not equal
+      $gt: Value is greater than another value
+      $gte: Value is greater than or equal to another value
+      $lt: Value is less than another value
+      $lte: Value is less than or equal to another value
+      $in: Value is matched within an array
+    logical: | can logically compare multiple queries
+      $and: Returns documents where both queries match
+      $or: Returns documents where either query matches
+      $nor: Returns documents where both queries fail to match
+      $not: Returns documents where the query does not match
+    evaluation: | assist in evaluating documents
+      $regex: Allows the use of regular expressions when evaluating field values
+      $text: Performs a text search
+      $where: Uses a JavaScript expression to match documents
+  update:
+    fields: | can be used to update fields
+      $currentDate: Sets the field value to the current date
+      $inc: Increments the field value
+      $rename: Renames the field
+      $set: Sets the value of a field
+      $unset: Removes the field from the document
+    array: | assist with updating arrays
+      $addToSet: Adds distinct elements to an array
+      $pop: Removes the first or last element of an array
+      $pull: Removes all elements from an array that match the query
+      $push: Adds an element to an array
+
+aggregation pipelines:
+  note: |
+    Aggregation operations allow you to group, sort, perform calculations, analyze data, and much more.
+    Aggregation pipelines can have one or more "stages".
+    The order of these stages are important.
+    Each stage acts upon the results of the previous stage.
+  example: |
+    db.posts.aggregate([
+      // Stage 1: Only find documents that have more than 1 like
+      {
+        $match: { likes: { $gt: 1 } }
+      },
+      // Stage 2: Group documents by category and sum each categories likes
+      {
+        $group: { _id: "$category", totalLikes: { $sum: "$likes" } }
+      }
+    ])
+  operators:
+    $group:
+      description: |
+        ...
+      example: |
+        * In this example, we are using the "sample_airbnb" database.
+        * This will return the distinct values from the property_type field.
+        db.listingsAndReviews.aggregate(
+            [ { $group : { _id : "$property_type" } } ]
+        )
+    $limit:
+      description: |
+        * This aggregation stage limits the number of documents passed to the next stage.
+      example: |
+        * In this example, we are using the "sample_mflix" database
+        * This will return the 1 movie from the collection
+        db.movies.aggregate([ { $limit: 1 } ])
+    $project:
+      description: |
+        * This aggregation stage passes only the specified fields along to the next aggregation stage.
+      example: |
+        * In this example, we are using the "sample_restaurants" database.
+        * This will return the documents but only include the specified fields.
+        db.restaurants.aggregate([
+          {
+            $project: {
+              "name": 1,
+              "cuisine": 1,
+              "address": 1
+            }
+          },
+          {
+            $limit: 5
+          }
+        ])
+    $sort:
+      description: |
+        * This aggregation stage groups sorts all documents in the specified sort order.
+      example: |
+        * In this example, we are using the "sample_airbnb" database.
+        * This will return the documents sorted in descending order by the accommodates field.
+        db.listingsAndReviews.aggregate([ 
+          { 
+            $sort: { "accommodates": -1 } 
+          },
+          {
+            $project: {
+              "name": 1,
+              "accommodates": 1
+            }
+          },
+          {
+            $limit: 5
+          }
+        ])
+    $match:
+      description: |
+        * This aggregation stage behaves like a find. 
+        * It will filter documents that match the query provided.
+      example: |
+        * In this example, we are using the "sample_airbnb" database.
+        * This will only return documents that have the property_type of "House".
+        db.listingsAndReviews.aggregate([ 
+          { $match : { property_type : "House" } },
+          { $limit: 2 },
+          { $project: {
+            "name": 1,
+            "bedrooms": 1,
+            "price": 1
+          }}
+        ])
+    $addFields:
+      description: |
+        * This aggregation stage adds new fields to documents.
+      example: |
+        * In this example, we are using the "sample_restaurants" database.
+        * This will return the documents along with a new field, avgGrade, 
+        which will contain the average of each restaurants grades.score.
+        db.restaurants.aggregate([
+          {
+            $addFields: {
+              avgGrade: { $avg: "$grades.score" }
+            }
+          },
+          {
+            $project: {
+              "name": 1,
+              "avgGrade": 1
+            }
+          },
+          {
+            $limit: 5
+          }
+        ])
+    $count:
+      description: |
+        * This aggregation stage counts the total amount of documents passed from the previous stage.
+      example: |
+        * In this example, we are using the "sample_restaurants" database.
+        * This will return the number of documents at the $count stage as a field called "totalChinese".
+        db.restaurants.aggregate([
+          {
+            $match: { "cuisine": "Chinese" }
+          },
+          {
+            $count: "totalChinese"
+          }
+        ])
+    $lookup:
+      description: |
+        * This aggregation stage performs a left outer join to a collection in the same database.
+        * There are four required fields:
+          - from:         The collection to use for lookup in the same database
+          - localField:   The field in the primary collection that can be used as a unique identifier in the from collection.
+          - foreignField: The field in the from collection that can be used as a unique identifier in the primary collection.
+          - as:           The name of the new field that will contain the matching documents from the from collection.
+      example: |
+        * In this example, we are using the "sample_mflix" database.
+        * This will return the movie data along with each comment.
+        db.comments.aggregate([
+          {
+            $lookup: {
+              from: "movies",
+              localField: "movie_id",
+              foreignField: "_id",
+              as: "movie_details",
+            },
+          },
+          {
+            $limit: 1
+          }
+        ])
+    $out:
+      description: |
+        * This aggregation stage writes the returned documents from the aggregation pipeline to a collection.
+      example: |
+        * In this example, we are using the "sample_airbnb" database.
+        * The first stage will group properties by the property_type 
+        and include the name, accommodates, and price fields for each. 
+        * The $out stage will create a new collection called properties_by_type 
+        in the current database and write the resulting documents into that collection.
+        db.listingsAndReviews.aggregate([
+          {
+            $group: {
+              _id: "$property_type",
+              properties: {
+                $push: {
+                  name: "$name",
+                  accommodates: "$accommodates",
+                  price: "$price",
+                },
+              },
+            },
+          },
+          { $out: "properties_by_type" },
+        ])
+
+indexing & search:
+  note: |
+    MongoDB Atlas comes with a full-text search engine that can be used to search for documents in a collection.
+
+schema validation:
+  note: |
+    * By default MongoDB has a flexible schema. 
+    * This means that there is no strict schema validation set up initially.
+    * Schema validation rules can be created in order to ensure that 
+    all documents a collection share a similar structure.
+  syntax: |
+    db.createCollection("collection_name", { validator: { $jsonSchema: json_obj }})
+  example: |
+    db.createCollection("posts", {
+      validator: {
+        $jsonSchema: {
+          bsonType: "object",
+          required: [ "title", "body" ],
+          properties: {
+            title: {
+              bsonType: "string",
+              description: "Title of post - Required."
+            },
+            body: {
+              bsonType: "string",
+              description: "Body of post - Required."
+            },
+            category: {
+              bsonType: "string",
+              description: "Category of post - Optional."
+            },
+            likes: {
+              bsonType: "int",
+              description: "Post like count. Must be an integer - Optional."
+            },
+            tags: {
+              bsonType: ["string"],
+              description: "Must be an array of strings - Optional."
+            },
+            date: {
+              bsonType: "date",
+              description: "Must be a date - Optional."
+            }
+          }
+        }
+      }
+    })
