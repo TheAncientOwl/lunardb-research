@@ -1,0 +1,17 @@
+fields of same type as the one which are declared:
+    example: |
+        type CustomType {
+            field1: String;
+            field2: CustomType;
+        };
+        create table MyTable based on CustomType;
+    note: |
+        By default will bind to the same table.
+        Here: MyTable::field2 binds to MyTable.
+{
+    "fields of same type as the one in which are declared": {
+        "example":
+    }
+}
+-- Note: by default fields of same type as the one declared will bind to the same table
+-- aka: rebind reference Employees: :manager to Employees;
