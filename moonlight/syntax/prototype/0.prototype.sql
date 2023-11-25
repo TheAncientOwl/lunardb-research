@@ -9,8 +9,8 @@ drop structure Professors cascade;
 -- 3. MIGRATE
 migrate structure Professors to NewSchema;
 migrate structure Professors to NewSchema using [
-    old_fiel1 => new_field1,
-    old_fiel2 => new_field2
+    old_field1 => new_field1,
+    old_field2 => new_field2
 ];
 
 -- 4. TRUNCATE
