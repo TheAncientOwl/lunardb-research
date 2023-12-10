@@ -2,8 +2,8 @@
 -- 1. Syntax
 -- --------------------------------------------------------------------------------- --
 
--- @brief create table|document
---  Creates the table|document based on given type.
+-- @brief create table|collection
+--  Creates the table|collection based on given type.
 --  If the type contains other custom types, 
 -- creates tables for them and binds the field to the new table
 -- @param blended -> 
@@ -23,7 +23,7 @@
 --          type1Field.someField2: Integer;
 --      };
 -- 
-create [volatile] table|document StructureName based on TypeName binding [ 
+create [volatile] table|collection StructureName based on TypeName binding [ 
     field from SomeOtherTableName,
 ] [blended];
 
@@ -35,7 +35,7 @@ create [volatile] table|document StructureName based on TypeName binding [
 -- 
 [clean] rebind StructureName::fieldName to OtherTable;
 
--- @brief create tables|documents
+-- @brief create tables|collections
 -- @args set of types from which the DBMS will create tables.
 -- @algorithm 
 --   Create all tables and rebind them if fields of types are present.
@@ -51,7 +51,7 @@ create [volatile] table|document StructureName based on TypeName binding [
 --      create tables from [ Type1, Type2 ] using format "%TypeName%Table";
 --   Create tables Type1Table and Type2Table and rebind Type2Table::field2 to Type1Table.
 -- 
-create [volatile] tables|documents from [ 
+create [volatile] tables|collections from [ 
     Type1, Type2, ..., TypeN
 ] using format "%TypeName%Structure";
 
@@ -121,8 +121,8 @@ type T1 {
     Z: Float;
 };
 
-create document T1_Document based on T1;
--- T1_Document
+create collection T1_Collection based on T1;
+-- T1_Collection
 -- {
 --     "x": "",
 --     "y": 0,
@@ -143,8 +143,8 @@ type T2 {
     c: T1;
 };
 
-create document T2_Document based on T2;
--- T2_Document
+create collection T2_Collection based on T2;
+-- T2_Collection
 -- {
 --     "a": "",
 --     "b": "",
@@ -174,8 +174,8 @@ type T3 {
     m: ArrayOf<T2>;
 };
 
-create document T3_Document based on T3;
--- T3_Document
+create collection T3_Collection based on T3;
+-- T3_Collection
 -- {
 --     "k": 0,
 --     "l": "",
@@ -222,8 +222,8 @@ type T4 {
     m: ArrayOf<T3>;
 };
 
-create document T4_Document based on T4;
--- T4_Document
+create collection T4_Collection based on T4;
+-- T4_Collection
 -- {
 --     "k": 0,
 --     "l": "",
