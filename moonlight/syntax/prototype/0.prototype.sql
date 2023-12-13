@@ -1,6 +1,19 @@
+-- 0. TYPES
+-- @see 1.types.sql
+
+-- @note Semicolons are not required on single instructions.
+--       They are used as separators when more than one query is provided
+
 -- 1. CREATE
-create table|collection Professors based on Professor;
-create table|collection Professors based on Professor volatile;
+create [volatile] table|collection StructureName based on TypeName binding [ 
+    field from SomeOtherTableName,
+] [blended];
+
+[clean] rebind StructureName::fieldName to OtherTable;
+
+create [volatile] tables|collections from [ 
+    Type1, Type2, ..., TypeN
+] using format "%TypeName%Structure";
 
 -- 2. DROP
 drop structure Professors;
@@ -32,7 +45,7 @@ select from StructureName::*arrayField*
 
 -- 7. INSERT
 insert into Professors values [
-    Professor { 
+    Professor {
         salary: 4000,
         Person {
             name: "Bob",
@@ -116,8 +129,7 @@ create unique index IndexName on StructureName using [
 
 -- 18. DATABASE
 database create|drop|backup DatabaseName 
-    to disk "/home/user/lunardb-backup"
-    with differential;
+    to disk "/home/user/lunardb-backup";
 
 -- 19. VIEW
 create view ViewName...

@@ -6,7 +6,7 @@
 --  Creates the table|collection based on given type.
 --  If the type contains other custom types, 
 -- creates tables for them and binds the field to the new table
--- @param blended -> 
+-- @param blended -> (for tables only)
 --  type Type1 {
 --      someField1: String;
 --      someField2: Integer;
