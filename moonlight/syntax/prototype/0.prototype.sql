@@ -1,6 +1,6 @@
 -- 1. CREATE
-create table|document Professors based on Professor;
-create table|document Professors based on Professor volatile;
+create table|collection Professors based on Professor;
+create table|collection Professors based on Professor volatile;
 
 -- 2. DROP
 drop structure Professors;
@@ -22,13 +22,13 @@ rename structure|field|database from Structure.OldFieldName to Structure.NewFiel
 
 -- 6. SELECT
 select from StructureName
-    if (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120) then
+    if (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120)
     fields [ field1, field2, ..., fieldx ]
     order by [ field1 asc, field2 desc, ..., field_z desc ];
 
 select from StructureName::*arrayField*
-    if ( conditions... ) then
-    fields [ fields from arrayField..., StructureName::fields from StructureName ]
+    if ( conditions... )
+    fields [ fields from arrayField..., StructureName::fields from StructureName ];
 
 -- 7. INSERT
 insert into Professors values [
@@ -75,8 +75,8 @@ insert into Professors values [
 
 -- 8. UPDATE
 update structure Professors 
-    if (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120) then
-    modify: [
+    if (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120)
+    modify [
         field1 => field1 * 1.5 + 2,
         field2 => field3
     ]
