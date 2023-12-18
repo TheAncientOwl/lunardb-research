@@ -3,7 +3,7 @@
 -- --------------------------------------------------------------------------------- --
 
 -- @brief type
-type TypeName {
+schema SchemaName {
     field1: Type;
     field2: Type?;
     field3: ArrayOf<Type>;
@@ -25,49 +25,49 @@ defaults:
 -- 2. Usage
 -- --------------------------------------------------------------------------------- --
 
-type Person {
+schema Person {
     firstName: String;
     lastName: String;
     phone: String;
     email: String;
 };
 
-type Client inherits Person {
+schema Client inherits Person {
     creditLimit: Float;
     birthDate: DateTime;
     sex: String;
     incomeLevel: String;
 };
 
-type Region {
+schema Region {
     name: String;
 }
 
-type Country {
+schema Country {
     name: String;
     region: Region;
 };
 
-type Location {
+schema Location {
     address: String;
     postCode: String;
     city: String;
     country: Country;
 };
 
-type Department {
+schema Department {
     name: String;
     manager: Employee?;
     location: Location;
 };
 
-type Function {
+schema Function {
     name: String;
     minSalary: Float;
     maxSalary: Float;
 };
 
-type Employee inherits Person {
+schema Employee inherits Person {
     employmentDate: DateTime;
     manager: Employee?;
     salary: Float;
@@ -75,20 +75,20 @@ type Employee inherits Person {
     department: Department;
 };
 
-type Product {
+schema Product {
     name: String;
     description: String;
     category: String;
     listPrice: Float;
 };
 
-type OrderedProduct {
+schema OrderedProduct {
     product: Product;
     price: Float;
     amount: Integer;
 };
 
-type Order {
+schema Order {
     date: DateTime;
     shipped: Boolean;
     paymentType: String;
@@ -97,7 +97,7 @@ type Order {
     products: ArrayOf<OrderedProduct>;
 };
 
-type FunctionsHistory {
+schema FunctionsHistory {
     startDate: DateTime;
     endDate: DateTime;
     employee: Employee;
