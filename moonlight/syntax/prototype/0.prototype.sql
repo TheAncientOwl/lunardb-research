@@ -9,7 +9,7 @@ create [volatile] table|collection StructureName based on TypeName binding [
     field from SomeOtherTableName,
 ] [blended];
 
-[clean] rebind StructureName::fieldName to OtherTable;
+rebind StructureName::fieldName to OtherTable [clean];
 
 create [volatile] tables|collections from [ 
     Type1, Type2, ..., TypeN
@@ -31,16 +31,16 @@ truncate structure Professors;
 
 -- 5. RENAME
 rename structure|field|database from OldName to NewName;
-rename structure|field|database from Structure.OldFieldName to Structure.NewFieldName;
+rename structure|field|database from Structure::OldFieldName to Structure::NewFieldName;
 
 -- 6. SELECT
 select from StructureName
-    if (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120)
+    where (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120)
     fields [ field1, field2, ..., fieldx ]
     order by [ field1 asc, field2 desc, ..., field_z desc ];
 
 select from StructureName::*arrayField*
-    if ( conditions... )
+    where ( conditions... )
     fields [ fields from arrayField..., StructureName::fields from StructureName ];
 
 -- 7. INSERT
@@ -88,48 +88,47 @@ insert into Professors values [
 
 -- 8. UPDATE
 update structure Professors 
-    if (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120)
-    modify [
+    where (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120)
+    modwherey [
         field1 => field1 * 1.5 + 2,
         field2 => field3
     ]
 
 -- 9. DELETE
 delete from structure Professor
-    if (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120);
+    where (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120);
 
 -- 10. LOCK
 set concurrency on structure Professor on|off;
 
--- 12. GRANT
+-- 11. GRANT
 grant [ update, insert, ..., delete ]
     to UserName
     on StructureName;
 
--- 13. REVOKE
+-- 12. REVOKE
 revoke [ update, insert, ..., delete ]
     from UserName
     on StructureName;
 
--- 14. COMMIT
+-- 13. COMMIT
 commit;
 
--- 15. ROLLBACK
-rollback;
+-- 14. ROLLBACK
+rollback [hash];
 
--- 16. SAVEPOINT
-savepoint;
-savepoint SavepointName;
+-- 15. SAVEPOINT
+savepoint [hash];
 
--- 17. INDEX
-create unique index IndexName on StructureName;
-create unique index IndexName on StructureName using [
+-- 16. INDEX
+index StructureName [unique] [as IndexName];
+index StructureName [unique] [as IndexName] using [
     field1, field2, ..., fieldx
 ];
 
--- 18. DATABASE
-database create|drop|backup DatabaseName 
+-- 17. DATABASE
+database create|drop|backup|use DatabaseName 
     to disk "/home/user/lunardb-backup";
 
--- 19. VIEW
+-- 18. VIEW
 create view ViewName...
