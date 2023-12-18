@@ -89,13 +89,13 @@ insert into Professors values [
 -- 8. UPDATE
 update structure Professors 
     where (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120)
-    modwherey [
+    modify [
         field1 => field1 * 1.5 + 2,
         field2 => field3
     ]
 
 -- 9. DELETE
-delete from structure Professor
+delete from structure Professors
     where (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120);
 
 -- 10. LOCK
