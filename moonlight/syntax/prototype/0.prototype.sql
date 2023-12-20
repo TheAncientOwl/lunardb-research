@@ -45,43 +45,33 @@ select from StructureName::*arrayField*
 
 -- 7. INSERT
 insert into Professors values [
-    Professor {
+    {
         salary: 4000,
-        Person {
-            name: "Bob",
-            birth_date: "09/10/1985",
-            address: Address {
-                street: "Some Street",
-                number: 5
-            }
+        name: "Bob",
+        birth_date: "09/10/1985",
+        address: {
+            street: "Some Street",
+            number: 5
         }
     },
-    -- OR
-    { 4500, { "Bob", "09/10/1985", { "Some Street", 5 } } },
-    -- OR
-    Professor {
+    {
         salary: 4000,
         rank: "HeadmasterSupreme", -- observe new field added dynamically
-        Person {
-            name: "Ultimate Bob",
-            birth_date: "09/10/1985",
-            address: Address {
-                street: "Some Street",
-                number: 5
-            }
+        name: "Ultimate Bob",
+        birth_date: "09/10/1985",
+        address: {
+            street: "Some Street",
+            number: 5
         }
     },
-    -- OR
-    Professor {
+    {
         salary: 4000,
         rank(String): "HeadmasterSupreme", -- observe new field added dynamically with data type
-        Person {
-            name: "Ultimate Bob",
-            birth_date: "09/10/1985",
-            address: Address {
-                street: "Some Street",
-                number: 5
-            }
+        name: "Ultimate Bob",
+        birth_date: "09/10/1985",
+        address: {
+            street: "Some Street",
+            number: 5
         }
     }
 ];
@@ -131,4 +121,4 @@ database create|drop|backup|use DatabaseName
     to disk "/home/user/lunardb-backup";
 
 -- 18. VIEW
-create view ViewName...
+view ViewName as select...
