@@ -5,7 +5,7 @@
 --       They are used as separators when more than one query is provided
 
 -- 1. CREATE
-create [volatile] table|collection StructureName based on TypeName binding [ 
+create [volatile] table|collection StructureName based on SchemaName binding [ 
     field from SomeOtherTableName,
 ] [blended];
 
@@ -44,34 +44,34 @@ select from StructureName::*arrayField*
     fields [ fields from arrayField..., StructureName::fields from StructureName ];
 
 -- 7. INSERT
-insert into Professors values [
+insert into Professors objects [
     {
-        salary: 4000,
-        name: "Bob",
-        birth_date: "09/10/1985",
-        address: {
-            street: "Some Street",
-            number: 5
+        "salary": "4000",
+        "name": "Bob",
+        "birth_date": "09/10/1985",
+        "address": {
+            "street": "Some Street",
+            "number": "5"
         }
     },
     {
-        salary: 4000,
-        rank: "HeadmasterSupreme", -- observe new field added dynamically
-        name: "Ultimate Bob",
-        birth_date: "09/10/1985",
-        address: {
-            street: "Some Street",
-            number: 5
+        "salary": "4000",
+        "rank": "HeadmasterSupreme", -- observe new field added dynamically
+        "name": "Ultimate Bob",
+        "birth_date": "09/10/1985",
+        "address": {
+            "street": "Some Street",
+            "number": "5"
         }
     },
     {
-        salary: 4000,
-        rank(String): "HeadmasterSupreme", -- observe new field added dynamically with data type
-        name: "Ultimate Bob",
-        birth_date: "09/10/1985",
-        address: {
-            street: "Some Street",
-            number: 5
+        "salary": "4000",
+        "rank(String)": "HeadmasterSupreme", -- observe new field added dynamically with data type
+        "name": "Ultimate Bob",
+        "birth_date": "09/10/1985",
+        "address": {
+            "street": "Some Street",
+            "number": "5"
         }
     }
 ];
