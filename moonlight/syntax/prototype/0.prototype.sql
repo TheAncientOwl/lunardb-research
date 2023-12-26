@@ -53,7 +53,7 @@ insert into Professors objects [
             "street": "Some Street",
             "number": "5"
         }
-    },
+    }
     {
         "salary": "4000",
         "rank": "HeadmasterSupreme", -- observe new field added dynamically
@@ -63,7 +63,7 @@ insert into Professors objects [
             "street": "Some Street",
             "number": "5"
         }
-    },
+    }
     {
         "salary": "4000",
         "rank(String)": "HeadmasterSupreme", -- observe new field added dynamically with data type
